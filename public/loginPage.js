@@ -5,9 +5,9 @@ const userForm = new UserForm();
 userForm.loginFormCallback = (data) => {
     ApiConnector.login(data, (response) => {
         if (response.success === true) {
-          return location.reload();
+          location.reload();
         } else {
-            return userForm.loginErrorMessageBox(error);
+            userForm.loginErrorMessageBox(response.error);
     }
     });
          
@@ -15,8 +15,8 @@ userForm.loginFormCallback = (data) => {
 
 userForm.registerFormCallback = (data) => {
     ApiConnector.register(data, (response) => {
-        if (response.success = true) {
-         return location.reload();
+        if (response.success === true) {
+         location.reload();
         } else {
             userForm.setRegisterErrorMessage(response.error);
         }
