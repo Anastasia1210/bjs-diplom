@@ -32,9 +32,73 @@ setInterval(function() {
 getRates();
 
 const moneyManager = new MoneyManager();
+const profileWidget = new ProfileWidget();
 
-moneyManager.addMoneyCallback = (response) => {
-  ApiConnector.addMoney(response, (request) => {
+moneyManager.addMoneyCallback = (data) => {
+  ApiConnector.addMoney(data, (response) => {
+      if (response.success === true) {
+          profileWidget.showProfile(data);
+          moneyManager.setMessage(response.data)
+        } else {
+          moneyManager.setMessage(response.error)
+        }
+    });
+}
 
- });
+moneyManager.conversionMoneyCallback = (data) => {
+    ApiConnector.convertMoney(data, (response) => {
+        if (response.success === true) {
+            profileWidget.showProfile(data);
+            moneyManager.setMessage(response.data)
+        } else {
+            moneyManager.setMessage(response.error)
+        }
+    });
+}
+
+moneyManager.sendMoneyCallback = (data) => {
+    ApiConnector.transferMoney(data, (response) => {
+        if (response.success === true) {
+            profileWidget.showProfile(data);
+            moneyManager.setMessage(response.data)
+        } else {
+            moneyManager.setMessage(response.error)
+        }
+    });
+}
+
+const favoritesWidget = new FavoritesWidget();
+
+ApiConnector.getFavorites((response) => {
+    if (response.success === true) {
+        favoritesWidget.clearTable();
+        favoritesWidget.fillTable(data);
+        moneyManager.updateUsersList(data);
+    }
+});
+
+favoritesWidget.addUserCallback = (data) => {
+    ApiConnector.addUserToFavourites(data, (response) => {
+        if (response.success === true) {
+            favoritesWidget.clearTable();
+            favoritesWidget.fillTable(data);
+            moneyManager.updateUsersList(data); 
+            moneyManager.setMessage(response.data)
+        } else {
+            moneyManager.setMessage(response.error)
+        }
+    });
+}
+
+favoritesWidget.removeUserCallback = (data) => {
+    ApiConnector.removeUserFromFavorites(data, (response) => {
+        if (response.success === true) {
+            favoritesWidget.clearTable();
+            favoritesWidget.fillTable(data);
+            moneyManager.updateUsersList(data); 
+            moneyManager.setMessage(response.data)
+        } else {
+            moneyManager.setMessage(response.error)
+        }
+    });
 }

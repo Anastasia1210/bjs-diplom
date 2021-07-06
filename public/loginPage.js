@@ -7,7 +7,7 @@ userForm.loginFormCallback = (data) => {
         if (response.success === true) {
           location.reload();
         } else {
-            userForm.loginErrorMessageBox(response.error);
+            userForm.setLoginErrorMessage(response.error);
     }
     });
          
