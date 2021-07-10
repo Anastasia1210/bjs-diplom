@@ -34,33 +34,33 @@ getRates();
 const moneyManager = new MoneyManager();
 const profileWidget = new ProfileWidget();
 
-moneyManager.addMoneyCallback = (data) => {
-  ApiConnector.addMoney(data, (response) => {
+moneyManager.addMoneyCallback = (call) => {
+  ApiConnector.addMoney(call, (response) => {
       if (response.success === true) {
-          profileWidget.showProfile(data);
-          moneyManager.setMessage(response.data)
+          profileWidget.showProfile(response.data);
+          moneyManager.setMessage(true, (call.amount + call.currency + ' уже в Вашем кармане'))
         } else {
-          moneyManager.setMessage(response.error)
+          moneyManager.setMessage(false, response.error)
         }
     });
 }
 
-moneyManager.conversionMoneyCallback = (data) => {
-    ApiConnector.convertMoney(data, (response) => {
+moneyManager.conversionMoneyCallback = (call) => {
+    ApiConnector.convertMoney(call, (response) => {
         if (response.success === true) {
-            profileWidget.showProfile(data);
-            moneyManager.setMessage(response.data)
+            profileWidget.showProfile(response.data);
+            moneyManager.setMessage(true, '(Конвертация прошла успешно'))
         } else {
-            moneyManager.setMessage(response.error)
+            moneyManager.setMessage(false, response.error)
         }
     });
 }
 
-moneyManager.sendMoneyCallback = (data) => {
-    ApiConnector.transferMoney(data, (response) => {
+moneyManager.sendMoneyCallback = (call) => {
+    ApiConnector.transferMoney(call, (response) => {
         if (response.success === true) {
-            profileWidget.showProfile(data);
-            moneyManager.setMessage(response.data)
+            profileWidget.showProfile(response.data);
+            moneyManager.setMessage(('Ваша щедрость не знает границ!'))
         } else {
             moneyManager.setMessage(response.error)
         }
@@ -72,31 +72,31 @@ const favoritesWidget = new FavoritesWidget();
 ApiConnector.getFavorites((response) => {
     if (response.success === true) {
         favoritesWidget.clearTable();
-        favoritesWidget.fillTable(data);
-        moneyManager.updateUsersList(data);
+        favoritesWidget.fillTable(response.data);
+        moneyManager.updateUsersList(response.data);
     }
 });
 
-favoritesWidget.addUserCallback = (data) => {
-    ApiConnector.addUserToFavourites(data, (response) => {
+favoritesWidget.addUserCallback = (call) => {
+    ApiConnector.addUserToFavorites(call, (response) => {
         if (response.success === true) {
             favoritesWidget.clearTable();
-            favoritesWidget.fillTable(data);
-            moneyManager.updateUsersList(data); 
-            moneyManager.setMessage(response.data)
+            favoritesWidget.fillTable(response.data);
+            moneyManager.updateUsersList(response.data); 
+            moneyManager.setMessage(true, (call.name + ' успешно добавлен в Адресную книгу'))
         } else {
-            moneyManager.setMessage(response.error)
+            moneyManager.setMessage(false, response.error)
         }
     });
 }
 
-favoritesWidget.removeUserCallback = (data) => {
-    ApiConnector.removeUserFromFavorites(data, (response) => {
+favoritesWidget.removeUserCallback = (call) => {
+    ApiConnector.removeUserFromFavorites(call, (response) => {
         if (response.success === true) {
             favoritesWidget.clearTable();
-            favoritesWidget.fillTable(data);
-            moneyManager.updateUsersList(data); 
-            moneyManager.setMessage(response.data)
+            favoritesWidget.fillTable(response.data);
+            moneyManager.updateUsersList(response.data); 
+            moneyManager.setMessage(true, (("Контакт с ID #") + call + (' был(а) успешно удален(а)'))
         } else {
             moneyManager.setMessage(response.error)
         }
