@@ -32,13 +32,12 @@ setInterval(function() {
 getRates();
 
 const moneyManager = new MoneyManager();
-const profileWidget = new ProfileWidget();
 
 moneyManager.addMoneyCallback = (call) => {
   ApiConnector.addMoney(call, (response) => {
       if (response.success === true) {
-          profileWidget.showProfile(response.data);
-          moneyManager.setMessage(true, (call.amount + call.currency + ' уже в Вашем кармане'))
+          ProfileWidget.showProfile(response.data);
+          moneyManager.setMessage(true, (call.amount + " " + call.currency + ' уже в Вашем кармане'))
         } else {
           moneyManager.setMessage(false, response.error)
         }
@@ -48,8 +47,8 @@ moneyManager.addMoneyCallback = (call) => {
 moneyManager.conversionMoneyCallback = (call) => {
     ApiConnector.convertMoney(call, (response) => {
         if (response.success === true) {
-            profileWidget.showProfile(response.data);
-            moneyManager.setMessage(true, '(Конвертация прошла успешно'))
+            ProfileWidget.showProfile(response.data);
+            moneyManager.setMessage(true, 'Конвертация прошла успешно')
         } else {
             moneyManager.setMessage(false, response.error)
         }
@@ -59,10 +58,10 @@ moneyManager.conversionMoneyCallback = (call) => {
 moneyManager.sendMoneyCallback = (call) => {
     ApiConnector.transferMoney(call, (response) => {
         if (response.success === true) {
-            profileWidget.showProfile(response.data);
-            moneyManager.setMessage(('Ваша щедрость не знает границ!'))
+            ProfileWidget.showProfile(response.data);
+            moneyManager.setMessage(true, 'Ваша щедрость не знает границ!')
         } else {
-            moneyManager.setMessage(response.error)
+            moneyManager.setMessage(false, response.error)
         }
     });
 }
@@ -96,9 +95,9 @@ favoritesWidget.removeUserCallback = (call) => {
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
             moneyManager.updateUsersList(response.data); 
-            moneyManager.setMessage(true, (("Контакт с ID #") + call + (' был(а) успешно удален(а)'))
+            moneyManager.setMessage(true, "Контакт с ID #" + call + ' был успешно удален');
         } else {
-            moneyManager.setMessage(response.error)
+            moneyManager.setMessage(response.error);
         }
     });
 }
